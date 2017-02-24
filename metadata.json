@@ -1,0 +1,39 @@
+{
+  "name": "dariah-usertomcat",
+  "version": "0.1.0-snapshot",
+  "author": "Ubbo Veentjer",
+  "license": "Apache-2.0",
+  "summary": "DARIAH-DE puppet module for utilizing the debian usertomcat tool",
+  "source": "https://github.com/DARIAH-DE/puppetmodule-usertomcat",
+  "project_page": "https://github.com/DARIAH-DE/puppetmodule-usertomcat",
+  "issues_url": "https://github.com/DARIAH-DE/puppetmodule-usertomcat/issues",
+  "tags": ["dariah", "tomcat","debian", "ubuntu", "usertomcat"],
+  "operatingsystem_support": [
+    {
+    "operatingsystem": "Ubuntu",
+    "operatingsystemrelease": [ 
+        "14.04", 
+        "16.04" 
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "7",
+        "8"
+      ]
+    }
+   ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.0.0 < 5.0.0"
+    }
+  ],
+  "dependencies": [
+    { "name": "puppetlabs-stdlib", "version_requirement": ">=4.13.1" },
+    { "name": "puppet-collectd", "version_requirement": ">=5.3.0" },
+    { "name": "yo61-logrotate", "version_requirement": ">=1.4.0" }
+  ]
+}
+

@@ -1,0 +1,13 @@
+--- server.xml.orig     2017-02-24 15:57:15.093946846 +0100
++++ server.xml  2017-02-24 16:11:51.633235374 +0100
+@@ -25,9 +25,8 @@
+   <Listener className="org.apache.catalina.security.SecurityListener" />
+   -->
+   <!--APR library loader. Documentation at /docs/apr.html -->
+-  <!--
+   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+-  -->
++
+   <!-- Prevent memory leaks due to use of particular java/javax APIs-->
+   <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+   <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
