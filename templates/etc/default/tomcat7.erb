@@ -22,7 +22,15 @@ TOMCAT7_GROUP=<%= @group %>
 # response time). If you use that option and you run Tomcat on a machine with
 # exactly one CPU chip that contains one or two cores, you should also add
 # the "-XX:+CMSIncrementalMode" option.
-JAVA_OPTS="-Djava.awt.headless=true -Xmx<%= @xmx %> -Xms<%= @xms %> -XX:+UseConcMarkSweepGC -Dcom.sun.management.jmxremote.port=<%= @jmx_port %> -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false <% @additional_java_opts %>"
+JAVA_OPTS="-Djava.awt.headless=true -Xmx<%= @xmx %> -Xms<%= @xms %> -XX:+UseConcMarkSweepGC"
+
+<% if @additional_java_opts != nil -%>
+JAVA_OPTS="${JAVA_OPTS} <%= @additional_java_opts %>"
+<% end -%>
+
+<% if @jmx_port != nil -%>
+JAVA_OPTS="${JAVA_OPTS} -Dcom.sun.management.jmxremote.port=<%= @jmx_port %> -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+<% end -%>
 
 # To enable remote debugging uncomment the following line.
 # You will then be able to use a java debugger on port 8000.
