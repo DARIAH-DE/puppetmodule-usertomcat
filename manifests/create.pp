@@ -40,12 +40,6 @@
 # [*collectd_enabled*]
 #   collect stats with collect, needs jmx_port to be set
 #
-# TODO:
-#   install libapr1 and integrate with tomcat-conf
-#      in conf/server.conf
-#   <!--APR library loader. Documentation at /docs/apr.html -->
-#   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
-#
 define usertomcat::create (
   $gid,
   $uid,
