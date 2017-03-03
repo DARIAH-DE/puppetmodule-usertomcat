@@ -17,6 +17,11 @@ usertomcat::instance { 'tomcat-jenkins':
 
 This would install the packages tomcat7 and tomcat7-user and libtcnative-1. It create a user and a group named "tomcat-jenkins" on the system. The usertomcat directory would be in the /home/tomcat-jenkins/tomcat-jenkins/, where the webapps dir the logs dir etc reside. A symlink to the logs dir is created in /var/logs/tomcat-jenkins. The tomcat will have the APR based native library enabled ([docs](http://tomcat.apache.org/tomcat-8.0-doc/apr.html)).
 
-User and group name and id, tomcat version, jmx port etc. could be configured, have a look at the file [instance.pp](manifests/instance.pp) for all configuration options.
+
+## Documentation
+User and group name and id, tomcat version, jmx port etc. could be configured.
+Have a look at the file [instance.pp](manifests/instance.pp) for all configuration options.
+
+The full documentation is available from [GitHub Pages](https://dariah-de.github.io/puppetmodule-usertomcat/).
 
 
