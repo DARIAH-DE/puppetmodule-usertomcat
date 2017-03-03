@@ -1,50 +1,47 @@
-# == Define: usertomcat::create
-#
 # Create a new user and tomcat-home and add tomcat-user-instance
 # uses debian package tomcat7-user
 #
-# === Parameters
-#
-# [*gid*]
+# @param gid
 #   the group id of new user
 #
-# [*uid*]
+# @param uid
 #   the user id of new user
 #
-# [*http_port*]
+# @param http_port
 #   which port should tomcat listen on
 #
-# [*control_port*]
+# @param control_port
 #   the tomcat control port
 #
-# [*jmx_port*]
+# @param jmx_port
 #   port for java jmx management, defaults to undef, in which case no jmx port will be openend
 #
-# [*xmx*]
+# @param xmx
 #   java max memory allocation (Xmx), default: 128m
 #
-# [*xms*]
+# @param xms
 #   java inital memory allocation (Xms), default: 32m
 #
-# [*user*]
-#   user which the service belongs to (will be created), defaults to $name if not set 
+# @param user
+#   user which the service belongs to (will be created), defaults to $name if not set
 #
-# [*group*]
-#   usergroup which the service belongs to (will be created), defaults to $name if not set 
+# @param group
+#   usergroup which the service belongs to (will be created), defaults to $name if not set
 #
-# [*additional_java_opts*]
+# @param additional_java_opts
 #   additional opts to be passed to tomcat as JAVA_OPTS
 #
-# [*init_dependencies*]
+# @param init_dependencies
 #   services which should be started before this tomcat, added as dependency to init.d script, separate with whitespace if more than one
-# [*collectd_enabled*]
+#
+# @param collectd_enabled
 #   collect stats with collect, needs jmx_port to be set
 #
-define usertomcat::create (
-  $gid,
-  $uid,
+define usertomcat::instance (
   $http_port,
   $control_port,
+  $gid                  = undef,
+  $uid                  = undef,
   $jmx_port             = undef,
   $xmx                  = '128m',
   $xms                  = '32m',
@@ -52,13 +49,13 @@ define usertomcat::create (
   $user                 = $name,
   $tomcat_version       = '7',
   $additional_java_opts = undef,
-  $init_dependencies    = '',
+  $init_dependencies    = undef,
   $collectd_enabled     = false,
 ) {
 
   require 'usertomcat::dependencies'
 
-  ensure_packages(["tomcat${tomcat_version}", "tomcat${tomcat_version}-user", "libtcnative-1"])
+  ensure_packages(["tomcat${tomcat_version}", "tomcat${tomcat_version}-user", 'libtcnative-1'])
 
   # Check if group and user are already existing.
   # Just in case we have two tomcats using the same user and group
@@ -96,7 +93,7 @@ define usertomcat::create (
   }
 
   file { "/etc/init.d/${name}":
-    ensure  => present,
+    ensure  => file,
     content => template("usertomcat/etc/init.d/tomcat${tomcat_version}.Debian.erb"),
     owner   => 'root',
     group   => 'root',
@@ -106,7 +103,7 @@ define usertomcat::create (
   }
 
   file { "/etc/default/${name}":
-    ensure  => present,
+    ensure  => file,
     content => template("usertomcat/etc/default/tomcat${tomcat_version}.erb"),
     owner   => 'root',
     group   => 'root',
@@ -116,8 +113,8 @@ define usertomcat::create (
   }
 
   file {"/var/log/${name}":
-    ensure  => link,
-    target  => "/home/${user}/${name}/logs",
+    ensure => link,
+    target => "/home/${user}/${name}/logs",
   }
 
   service { $name:
@@ -136,15 +133,15 @@ define usertomcat::create (
     missingok    => true,
     ifempty      => true,
     dateext      => true,
-    dateformat   => '.%Y-%m-%d'
+    dateformat   => '.%Y-%m-%d',
   }
 
   if $collectd_enabled {
     collectd::plugin::genericjmx::connection { $name:
-        host            => $fqdn,
-        service_url     => "service:jmx:rmi:///jndi/rmi://localhost:${jmx_port}/jmxrmi",
-        collect         => [ 'memory-heap', 'memory-nonheap', 'process_cpu_load' ],
-        instance_prefix => "${name}-",
+      host            => $facts['networking']['fqdn'],
+      service_url     => "service:jmx:rmi:///jndi/rmi://localhost:${jmx_port}/jmxrmi",
+      collect         => [ 'memory-heap', 'memory-nonheap', 'process_cpu_load' ],
+      instance_prefix => "${name}-",
     }
   }
 
