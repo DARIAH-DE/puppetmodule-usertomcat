@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Defined Type: usertomcat::instance
+  
+    &mdash; Documentation by YARD 0.9.8
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_defined_types::usertomcat::instance";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_defined_type_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (u)</a> &raquo;
+    <span class='title'><span class='object_link'>Defined Types</span></span>
+     &raquo; 
+    <span class="title">usertomcat::instance</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Defined Type: usertomcat::instance</h1>
+<div class="box_info">
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/instance.pp
+    </dd>
+  </dl>
+</div>
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    <p>Create a new user and tomcat-home and add tomcat-user-instance
+uses debian package tomcat7-user</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>gid</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>the group id of new user</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>uid</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>the user id of new user</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>http_port</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>which port should tomcat listen on</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>control_port</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the tomcat control port</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>jmx_port</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>port for java jmx management, defaults to undef, in which case no jmx port will be openend</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>xmx</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;128m&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>java max memory allocation (Xmx), default: 128m</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>xms</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;32m&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>java inital memory allocation (Xms), default: 32m</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$name</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>user which the service belongs to (will be created), defaults to $name if not set</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$name</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>usergroup which the service belongs to (will be created), defaults to $name if not set</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>additional_java_opts</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>additional opts to be passed to tomcat as JAVA_OPTS</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>init_dependencies</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>services which should be started before this tomcat, added as dependency to init.d script, separate with whitespace if more than one</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>collectd_enabled</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>collect stats with collect, needs jmx_port to be set</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>tomcat_version</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;7&#39;</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/instance.pp', line 40</span>
+
+define usertomcat::instance (
+  $http_port,
+  $control_port,
+  $gid                  = undef,
+  $uid                  = undef,
+  $jmx_port             = undef,
+  $xmx                  = &#39;128m&#39;,
+  $xms                  = &#39;32m&#39;,
+  $group                = $name,
+  $user                 = $name,
+  $tomcat_version       = &#39;7&#39;,
+  $additional_java_opts = undef,
+  $init_dependencies    = undef,
+  $collectd_enabled     = false,
+) {
+
+  require &#39;usertomcat::dependencies&#39;
+
+  ensure_packages([&quot;tomcat${tomcat_version}&quot;, &quot;tomcat${tomcat_version}-user&quot;, &#39;libtcnative-1&#39;])
+
+  # Check if group and user are already existing.
+  # Just in case we have two tomcats using the same user and group
+  # (e.g. tgcrud and tgcrud-public or group ULSB is already existing :-)
+  if ! defined(Group[$group]) {
+    group { $group:
+      ensure =&gt;  present,
+      gid    =&gt;  $gid,
+    }
+  }
+  if ! defined(User[$user]) {
+    user { $user:
+      ensure     =&gt; present,
+      uid        =&gt; $uid,
+      gid        =&gt; $gid,
+      shell      =&gt; &#39;/bin/bash&#39;,
+      home       =&gt; &quot;/home/${user}&quot;,
+      managehome =&gt; true,
+    }
+  }
+
+  exec { &quot;create_${name}&quot;:
+    path    =&gt; [&#39;/usr/bin&#39;,&#39;/bin&#39;,&#39;/usr/sbin&#39;],
+    command =&gt; &quot;tomcat${tomcat_version}-instance-create -p ${http_port} -c ${control_port} /home/${user}/${name}&quot;,
+    creates =&gt; &quot;/home/${user}/${name}&quot;,
+    user    =&gt; $user,
+    require =&gt; Package[&quot;tomcat${tomcat_version}-user&quot;],
+  }
+  ~&gt;
+  exec { &quot;patching_${name}_for_apr&quot;:
+    path        =&gt; [&#39;/usr/bin&#39;,&#39;/bin&#39;,&#39;/usr/sbin&#39;],
+    command     =&gt; &quot;patch /home/${user}/${name}/conf/server.xml &lt; /usr/local/src/tomcat${tomcat_version}-apr.patch&quot;,
+    refreshonly =&gt; true,
+    require     =&gt; File[&quot;/usr/local/src/tomcat${tomcat_version}-apr.patch&quot;],
+  }
+
+  file { &quot;/etc/init.d/${name}&quot;:
+    ensure  =&gt; file,
+    content =&gt; template(&quot;usertomcat/etc/init.d/tomcat${tomcat_version}.Debian.erb&quot;),
+    owner   =&gt; &#39;root&#39;,
+    group   =&gt; &#39;root&#39;,
+    mode    =&gt; &#39;0755&#39;,
+    before  =&gt; Service[$name],
+    notify  =&gt; Service[$name],
+  }
+
+  file { &quot;/etc/default/${name}&quot;:
+    ensure  =&gt; file,
+    content =&gt; template(&quot;usertomcat/etc/default/tomcat${tomcat_version}.erb&quot;),
+    owner   =&gt; &#39;root&#39;,
+    group   =&gt; &#39;root&#39;,
+    mode    =&gt; &#39;0644&#39;,
+    before  =&gt; Service[$name],
+    notify  =&gt; Service[$name],
+  }
+
+  file {&quot;/var/log/${name}&quot;:
+    ensure =&gt; link,
+    target =&gt; &quot;/home/${user}/${name}/logs&quot;,
+  }
+
+  service { $name:
+    ensure  =&gt; running,
+    enable  =&gt; true,
+    require =&gt; Exec[&quot;create_${name}&quot;],
+  }
+
+  logrotate::rule { $name:
+    path         =&gt; &quot;/home/${user}/${name}/logs/catalina.out&quot;,
+    require      =&gt; Exec[&quot;create_${name}&quot;],
+    rotate       =&gt; 365,
+    rotate_every =&gt; &#39;week&#39;,
+    compress     =&gt; true,
+    copytruncate =&gt; true,
+    missingok    =&gt; true,
+    ifempty      =&gt; true,
+    dateext      =&gt; true,
+    dateformat   =&gt; &#39;.%Y-%m-%d&#39;,
+  }
+
+  if $collectd_enabled {
+    collectd::plugin::genericjmx::connection { $name:
+      host            =&gt; $facts[&#39;networking&#39;][&#39;fqdn&#39;],
+      service_url     =&gt; &quot;service:jmx:rmi:///jndi/rmi://localhost:${jmx_port}/jmxrmi&quot;,
+      collect         =&gt; [ &#39;memory-heap&#39;, &#39;memory-nonheap&#39;, &#39;process_cpu_load&#39; ],
+      instance_prefix =&gt; &quot;${name}-&quot;,
+    }
+  }
+
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+  Generated on Fri Mar  3 11:53:59 2017 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.8 (ruby-2.3.1).
+</div>
+
+    </div>
+  </body>
+</html>
