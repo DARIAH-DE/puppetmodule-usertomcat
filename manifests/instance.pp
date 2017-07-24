@@ -37,6 +37,9 @@
 # @param collectd_enabled
 #   collect stats with collect, needs jmx_port to be set
 #
+# @param collectd_enabled
+#   collect stats with telegraf, installs jolokia.war in webapp dir
+#
 define usertomcat::instance (
   $http_port,
   $control_port,
