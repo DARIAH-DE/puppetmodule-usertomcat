@@ -150,8 +150,8 @@ define usertomcat::instance (
 
     require 'usertomcat::jolokia'
 
-    file { '/home/${user}/${name}/webapps/jolokia.war':
-      source => "/var/cache/jolokia.war",
+    file { "/home/${user}/${name}/webapps/jolokia.war":
+      source => '/var/cache/jolokia.war',
     }
 
     telegraf::input { "jolokia_${name}":
