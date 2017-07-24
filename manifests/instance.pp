@@ -170,6 +170,8 @@ define usertomcat::instance (
           'mbean' => 'java.lang:type=Memory',
           'attribute' => 'HeapMemoryUsage',
         },
+      },
+      single_section => {
         'jolokia.metrics' => {
           'name' => 'process_cpu_load',
           'mbean' => 'java.lang:type=OperatingSystem',
