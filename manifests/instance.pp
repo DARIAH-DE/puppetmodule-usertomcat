@@ -154,7 +154,7 @@ define usertomcat::instance (
       source => '/var/cache/jolokia.war',
     }
 
-    telegraf::input { "jolokia_${name}":
+    telegraf::input { "jolokia_${name}_mem":
       plugin_type => 'jolokia',
       options     => {
         'context' => '/jolokia/',
@@ -171,7 +171,19 @@ define usertomcat::instance (
           'attribute' => 'HeapMemoryUsage',
         },
       },
-      single_section => {
+    }
+
+    telegraf::input { "jolokia_${name}_cpu":
+      plugin_type => 'jolokia',
+      options     => {
+        'context' => '/jolokia/',
+      },
+      sections    => {
+        'jolokia.servers' => {
+          'name'   => $name,
+          'host' => '127.0.0.1',
+          'port' => $http_port,
+        },
         'jolokia.metrics' => {
           'name' => 'process_cpu_load',
           'mbean' => 'java.lang:type=OperatingSystem',
