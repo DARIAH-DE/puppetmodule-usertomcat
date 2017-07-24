@@ -160,7 +160,7 @@ define usertomcat::instance (
         'context' => '/jolokia/',
       },
       sections    => {
-        'jolokia.server' => {
+        'jolokia.servers' => {
           'name'   => $name,
           'host' => '127.0.0.1',
           'port' => $http_port,
@@ -169,6 +169,11 @@ define usertomcat::instance (
           'name' => 'heap_memory_usage',
           'mbean' => 'java.lang:type=Memory',
           'attribute' => 'HeapMemoryUsage',
+        },
+        'jolokia.metrics' => {
+          'name' => 'process_cpu_load',
+          'mbean' => 'java.lang:type=OperatingSystem',
+          'attribute' => 'ProcessCpuLoad',
         },
       },
     }
