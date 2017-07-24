@@ -51,6 +51,7 @@ define usertomcat::instance (
   $additional_java_opts = undef,
   $init_dependencies    = undef,
   $collectd_enabled     = false,
+  $telegraf_enabled     = false,
 ) {
 
   require 'usertomcat::dependencies'
@@ -143,6 +144,35 @@ define usertomcat::instance (
       collect         => [ 'memory-heap', 'memory-nonheap', 'process_cpu_load' ],
       instance_prefix => "${name}-",
     }
+  }
+
+  if $telegraf_enabled {
+
+    require 'usertomcat::jolokia'
+
+    file { '/home/${user}/${name}/webapps/jolokia.war':
+      source => "/var/cache/jolokia.war",
+    }
+
+    telegraf::input { "jolokia_${name}":
+      plugin_type => 'jolokia',
+      options     => {
+        'context' => '/jolokia/',
+      },
+      sections    => {
+        'jolokia.server' => {
+          'name'   => $name,
+          'host' => '127.0.0.1',
+          'port' => $http_port,
+        },
+        'jolokia.metrics' => {
+          'name' => 'heap_memory_usage',
+          'mbean' => 'java.lang:type=Memory',
+          'attribute' => 'HeapMemoryUsage',
+        },
+      },
+    }
+
   }
 
 }
