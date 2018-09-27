@@ -130,8 +130,8 @@ define usertomcat::instance (
   logrotate::rule { $name:
     path         => "/home/${user}/${name}/logs/catalina.out",
     require      => Exec["create_${name}"],
-    rotate       => 365,
-    rotate_every => 'week',
+    rotate       => 30,
+    rotate_every => 'day',
     compress     => true,
     copytruncate => true,
     missingok    => true,
