@@ -122,13 +122,21 @@ define usertomcat::instance (
     require => Exec["create_${name}"],
   }
 
+  # create logdir (if not yet existing)
+  file { $logdir:
+    ensure => file,
+    owner  => $user,
+    group  => $group,
+    mode   => '0755',
+  }
   # add symlink to var/log/$name
   file {"/var/log/${name}":
-    ensure => link,
-    target => $logdir,
+    ensure  => link,
+    target  => $logdir,
+    require => File[$logdir],
   }
-  # add logdir to logging-properties
-  # TODO
+  # add logdir to logging.properties
+  # ++TODO++
   # logrotate
   logrotate::rule { $name:
     path         => "${logdir}/catalina.out",
