@@ -55,6 +55,7 @@ define usertomcat::instance (
   $init_dependencies    = undef,
   $collectd_enabled     = false,
   $telegraf_enabled     = false,
+  $logdir               = "/home/${user}/${name}/logs",
 ) {
 
   require 'usertomcat::dependencies'
@@ -88,8 +89,7 @@ define usertomcat::instance (
     user    => $user,
     require => Package["tomcat${tomcat_version}-user"],
   }
-  ~>
-  exec { "patching_${name}_for_apr":
+  ~> exec { "patching_${name}_for_apr":
     path        => ['/usr/bin','/bin','/usr/sbin'],
     command     => "patch /home/${user}/${name}/conf/server.xml < /usr/local/src/tomcat${tomcat_version}-apr.patch",
     refreshonly => true,
@@ -116,19 +116,22 @@ define usertomcat::instance (
     notify  => Service[$name],
   }
 
-  file {"/var/log/${name}":
-    ensure => link,
-    target => "/home/${user}/${name}/logs",
-  }
-
   service { $name:
     ensure  => running,
     enable  => true,
     require => Exec["create_${name}"],
   }
 
+  # add symlink to var/log/$name
+  file {"/var/log/${name}":
+    ensure => link,
+    target => $logdir,
+  }
+  # add logdir to logging-properties
+  # TODO
+  # logrotate
   logrotate::rule { $name:
-    path         => "/home/${user}/${name}/logs/catalina.out",
+    path         => "${logdir}/catalina.out",
     require      => Exec["create_${name}"],
     rotate       => 30,
     rotate_every => 'day',
@@ -164,13 +167,13 @@ define usertomcat::instance (
       },
       sections    => {
         'jolokia.servers' => {
-          'name'   => $name,
+          'name' => $name,
           'host' => '127.0.0.1',
           'port' => $http_port,
         },
         'jolokia.metrics' => {
-          'name' => 'heap_memory_usage',
-          'mbean' => 'java.lang:type=Memory',
+          'name'      => 'heap_memory_usage',
+          'mbean'     => 'java.lang:type=Memory',
           'attribute' => 'HeapMemoryUsage',
         },
       },
@@ -183,18 +186,17 @@ define usertomcat::instance (
       },
       sections    => {
         'jolokia.servers' => {
-          'name'   => $name,
+          'name' => $name,
           'host' => '127.0.0.1',
           'port' => $http_port,
         },
         'jolokia.metrics' => {
-          'name' => 'process_cpu_load',
-          'mbean' => 'java.lang:type=OperatingSystem',
+          'name'      => 'process_cpu_load',
+          'mbean'     => 'java.lang:type=OperatingSystem',
           'attribute' => 'ProcessCpuLoad',
         },
       },
     }
 
   }
-
 }
