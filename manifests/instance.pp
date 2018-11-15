@@ -59,7 +59,7 @@ define usertomcat::instance (
   $collectd_enabled     = false,
   $telegraf_enabled     = false,
   $logdir               = "/home/${user}/${name}/logs",
-  $keep_logs            = '30',
+  $keep_logs            = 30,
 ) {
 
   require 'usertomcat::dependencies'
