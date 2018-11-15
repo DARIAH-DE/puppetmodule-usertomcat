@@ -37,8 +37,11 @@
 # @param collectd_enabled
 #   collect stats with collect, needs jmx_port to be set
 #
-# @param collectd_enabled
+# @param telegraph_enabled
 #   collect stats with telegraf, installs jolokia.war in webapp dir
+#
+# @param keep_logs
+#   the amount if days catalina logs are kept by logrotate
 #
 define usertomcat::instance (
   $http_port,
@@ -56,6 +59,7 @@ define usertomcat::instance (
   $collectd_enabled     = false,
   $telegraf_enabled     = false,
   $logdir               = "/home/${user}/${name}/logs",
+  $keep_logs            = '30',
 ) {
 
   require 'usertomcat::dependencies'
@@ -124,9 +128,8 @@ define usertomcat::instance (
 
   # add symlink to var/log/$name
   file {"/var/log/${name}":
-    ensure  => link,
-    target  => $logdir,
-    require => File[$logdir],
+    ensure => link,
+    target => $logdir,
   }
   # add logdir to logging.properties
   # ++TODO++
@@ -134,7 +137,7 @@ define usertomcat::instance (
   logrotate::rule { $name:
     path         => "${logdir}/catalina.out",
     require      => Exec["create_${name}"],
-    rotate       => 30,
+    rotate       => $keep_logs,
     rotate_every => 'day',
     compress     => true,
     copytruncate => true,
