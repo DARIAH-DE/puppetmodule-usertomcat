@@ -41,7 +41,7 @@
 #   collect stats with telegraf, installs jolokia.war in webapp dir
 #
 # @param keep_logs
-#   the amount if days catalina logs are kept by logrotate
+#   the amount of days catalina logs are kept by logrotate
 #
 define usertomcat::instance (
   $http_port,
@@ -201,6 +201,5 @@ define usertomcat::instance (
         },
       },
     }
-
   }
 }
