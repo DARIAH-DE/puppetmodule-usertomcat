@@ -198,34 +198,34 @@ define usertomcat::instance (
       }],
     }
 
-#    telegraf::input { "jolokia2_${name}_tomcat":
-#      plugin_type => 'jolokia2_agent',
-#      options     => [{
-#        'urls' => ["http://127.0.0.1:${http_port}/jolokia/"],
-#        'name_prefix' => "${name}.",
-#        'metric' => [{
-#          'name'     => 'tomcat_requests',
-#          'mbean'    => 'Catalina:name=*,type=GlobalRequestProcessor',
-#          'paths'     => [ 'requestCount','bytesReceived','bytesSent','processingTime','errorCount' ],
-#          'tag_keys' => ['name'],
-#        },{
-#          'name'     => 'tomcat_threads',
-#          'mbean'    => 'Catalina:name=*,type=ThreadPool',
-#          'paths'     => [ 'maxThreads','currentThreadCount','currentThreadsBusy' ],
-#          'tag_keys' => ['name'],
-#        },{
-#          'name'     => 'process_cpu_load',
-#          'mbean'    => 'java.lang:type=OperatingSystem',
-#          'paths'     => [ 'ProcessCpuLoad' ],
-#          'tag_keys' => ['name'],
-#        },{
-#          'name'     => 'heap_memory_usage',
-#          'mbean'    => 'java.lang:type=Memory',
-#          'paths'     => [ 'HeapMemoryUsage' ],
-#          'tag_keys' => ['name'],
-#        }],
-#      }],
-#    }
+    telegraf::input { "jolokia2_${name}_tomcat":
+      plugin_type => 'jolokia2_agent',
+      options     => [{
+        'urls' => ["http://127.0.0.1:${http_port}/jolokia/"],
+        'name_prefix' => "${name}.",
+        'metric' => [{
+          'name'     => 'tomcat_requests',
+          'mbean'    => 'Catalina:name=*,type=GlobalRequestProcessor',
+          'paths'     => [ 'requestCount','bytesReceived','bytesSent','processingTime','errorCount' ],
+          'tag_keys' => ['name'],
+        },{
+          'name'     => 'tomcat_threads',
+          'mbean'    => 'Catalina:name=*,type=ThreadPool',
+          'paths'     => [ 'maxThreads','currentThreadCount','currentThreadsBusy' ],
+          'tag_keys' => ['name'],
+        },{
+          'name'     => 'process_cpu_load',
+          'mbean'    => 'java.lang:type=OperatingSystem',
+          'paths'     => [ 'ProcessCpuLoad' ],
+          'tag_keys' => ['name'],
+        },{
+          'name'     => 'heap_memory_usage',
+          'mbean'    => 'java.lang:type=Memory',
+          'paths'     => [ 'HeapMemoryUsage' ],
+          'tag_keys' => ['name'],
+        }],
+      }],
+    }
 
   }
 }
