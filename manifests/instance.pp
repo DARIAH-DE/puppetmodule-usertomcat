@@ -34,9 +34,6 @@
 # @param init_dependencies
 #   services which should be started before this tomcat, added as dependency to init.d script, separate with whitespace if more than one
 #
-# @param collectd_enabled
-#   collect stats with collect, needs jmx_port to be set
-#
 # @param telegraph_enabled
 #   collect stats with telegraf, installs jolokia.war in webapp dir
 #
@@ -56,7 +53,6 @@ define usertomcat::instance (
   $tomcat_version       = '7',
   $additional_java_opts = undef,
   $init_dependencies    = undef,
-  $collectd_enabled     = false,
   $telegraf_enabled     = false,
   $logdir               = "/home/${user}/${name}/logs",
   $keep_logs            = 30,
@@ -145,15 +141,6 @@ define usertomcat::instance (
     ifempty      => true,
     dateext      => true,
     dateformat   => '.%Y-%m-%d',
-  }
-
-  if $collectd_enabled {
-    collectd::plugin::genericjmx::connection { $name:
-      host            => $facts['networking']['fqdn'],
-      service_url     => "service:jmx:rmi:///jndi/rmi://localhost:${jmx_port}/jmxrmi",
-      collect         => [ 'memory-heap', 'memory-nonheap', 'process_cpu_load' ],
-      instance_prefix => "${name}-",
-    }
   }
 
   if $telegraf_enabled {
