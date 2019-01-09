@@ -13,7 +13,8 @@
     "operatingsystem": "Ubuntu",
     "operatingsystemrelease": [ 
         "14.04", 
-        "16.04" 
+        "16.04",
+        "18.04"
       ]
     },
     {
@@ -27,12 +28,12 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.0.0 < 5.0.0"
+      "version_requirement": ">= 4.0.0 < 6.0.0"
     }
   ],
   "dependencies": [
     { "name": "puppetlabs-stdlib", "version_requirement": ">=4.13.1" },
-    { "name": "yankcrime-telegraf", "version_requirement": ">=2.0.1" },
+    { "name": "puppet-telegraf", "version_requirement": ">=2.1.0" },
     { "name": "puppet-logrotate", "version_requirement": ">=2.0.0" }
   ]
 }
