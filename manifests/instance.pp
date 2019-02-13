@@ -40,6 +40,9 @@
 # @param telegraph_enabled
 #   collect stats with telegraf, installs jolokia.war in webapp dir
 #
+# @param additional_java_opts
+#   additional opts to be passed to tomcat as JAVA_OPTS
+#
 # @param keep_logs
 #   the amount of days catalina logs are kept by logrotate
 #
@@ -158,31 +161,30 @@ define usertomcat::instance (
     telegraf::input { "jolokia2_${name}_tomcat":
       plugin_type => 'jolokia2_agent',
       options     => [{
-        'urls' => ["http://127.0.0.1:${http_port}/jolokia/"],
-        'name_prefix' => "${name}.",
-        'metric' => [{
-          'name'     => 'tomcat_requests',
-          'mbean'    => 'Catalina:name=*,type=GlobalRequestProcessor',
-          'paths'     => [ 'requestCount','bytesReceived','bytesSent','processingTime','errorCount' ],
-          'tag_keys' => ['name'],
-        },{
-          'name'     => 'tomcat_threads',
-          'mbean'    => 'Catalina:name=*,type=ThreadPool',
-          'paths'     => [ 'maxThreads','currentThreadCount','currentThreadsBusy' ],
-          'tag_keys' => ['name'],
-        },{
-          'name'     => 'process_cpu_load',
-          'mbean'    => 'java.lang:type=OperatingSystem',
-          'paths'     => [ 'ProcessCpuLoad' ],
-          'tag_keys' => ['name'],
-        },{
-          'name'     => 'heap_memory_usage',
-          'mbean'    => 'java.lang:type=Memory',
-          'paths'     => [ 'HeapMemoryUsage' ],
-          'tag_keys' => ['name'],
-        }],
+          'urls'        => ["http://127.0.0.1:${http_port}/jolokia/"],
+          'name_prefix' => "${name}.",
+          'metric'      => [{
+              'name'     => 'tomcat_requests',
+              'mbean'    => 'Catalina:name=*,type=GlobalRequestProcessor',
+              'paths'    => [ 'requestCount','bytesReceived','bytesSent','processingTime','errorCount' ],
+              'tag_keys' => ['name'],
+            },{
+              'name'     => 'tomcat_threads',
+              'mbean'    => 'Catalina:name=*,type=ThreadPool',
+              'paths'    => [ 'maxThreads','currentThreadCount','currentThreadsBusy' ],
+              'tag_keys' => ['name'],
+            },{
+              'name'     => 'process_cpu_load',
+              'mbean'    => 'java.lang:type=OperatingSystem',
+              'paths'    => [ 'ProcessCpuLoad' ],
+              'tag_keys' => ['name'],
+            },{
+              'name'     => 'heap_memory_usage',
+              'mbean'    => 'java.lang:type=Memory',
+              'paths'    => [ 'HeapMemoryUsage' ],
+              'tag_keys' => ['name'],
+          }],
       }],
     }
-
   }
 }
