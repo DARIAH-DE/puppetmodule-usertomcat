@@ -31,6 +31,9 @@
 # @param additional_java_opts
 #   additional opts to be passed to tomcat as JAVA_OPTS
 #
+# @param additional_default_lines
+#   additional lines to add to /etc/default/tomcat-$name
+#
 # @param init_dependencies
 #   services which should be started before this tomcat, added as dependency to init.d script, separate with whitespace if more than one
 #
@@ -43,19 +46,20 @@
 define usertomcat::instance (
   $http_port,
   $control_port,
-  $gid                  = undef,
-  $uid                  = undef,
-  $jmx_port             = undef,
-  $xmx                  = '128m',
-  $xms                  = '32m',
-  $group                = $name,
-  $user                 = $name,
-  $tomcat_version       = '7',
-  $additional_java_opts = undef,
-  $init_dependencies    = undef,
-  $telegraf_enabled     = false,
-  $logdir               = "/home/${user}/${name}/logs",
-  $keep_logs            = 30,
+  $gid                      = undef,
+  $uid                      = undef,
+  $jmx_port                 = undef,
+  $xmx                      = '128m',
+  $xms                      = '32m',
+  $group                    = $name,
+  $user                     = $name,
+  $tomcat_version           = '7',
+  $additional_java_opts     = undef,
+  $additional_default_lines = [],
+  $init_dependencies        = undef,
+  $telegraf_enabled         = false,
+  $logdir                   = "/home/${user}/${name}/logs",
+  $keep_logs                = 30,
 ) {
 
   require 'usertomcat::dependencies'

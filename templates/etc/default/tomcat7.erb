@@ -64,3 +64,7 @@ JAVA_OPTS="${JAVA_OPTS} -Dcom.sun.management.jmxremote.port=<%= @jmx_port %> -Dc
 
 # libtcnative on ubuntu 14.04 for oracle-java-8
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu/
+
+<% @additional_default_lines.each do |line| -%>
+<%= line %>
+<% end -%>
