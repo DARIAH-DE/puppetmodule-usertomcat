@@ -46,8 +46,6 @@
 # @param keep_logs
 #   the amount of days catalina logs are kept by logrotate
 #
-# @param apr_patch
-#   apply apr patch or not
 define usertomcat::instance (
   $http_port,
   $control_port,
@@ -65,7 +63,6 @@ define usertomcat::instance (
   $telegraf_enabled         = false,
   $logdir                   = "/home/${user}/${name}/logs",
   $keep_logs                = 30,
-  $apr_patch                = true,
 ) {
 
   require 'usertomcat::dependencies'
@@ -99,15 +96,12 @@ define usertomcat::instance (
     user    => $user,
     require => Package["tomcat${tomcat_version}-user"],
   }
-  ~>
-  if $apr_patch {
-    exec { "patching_${name}_for_apr":
-      path        => ['/usr/bin','/bin','/usr/sbin'],
-      command     => "patch /home/${user}/${name}/conf/server.xml < /usr/local/src/tomcat${tomcat_version}-apr.patch",
-      refreshonly => true,
-      require     => File["/usr/local/src/tomcat${tomcat_version}-apr.patch"],
-    }
-  }
+#  ~> exec { "patching_${name}_for_apr":
+#    path        => ['/usr/bin','/bin','/usr/sbin'],
+#    command     => "patch /home/${user}/${name}/conf/server.xml < /usr/local/src/t#omcat${tomcat_version}-apr.patch",
+#    refreshonly => true,
+#    require     => File["/usr/local/src/tomcat${tomcat_version}-apr.patch"],
+#  }
 
   file { "/etc/init.d/${name}":
     ensure  => file,
