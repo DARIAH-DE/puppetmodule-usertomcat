@@ -99,8 +99,8 @@ define usertomcat::instance (
     user    => $user,
     require => Package["tomcat${tomcat_version}-user"],
   }
-  ~> if $apr_patch {
-    exec { "patching_${name}_for_apr":
+  if $apr_patch {
+    ~> exec { "patching_${name}_for_apr":
       path        => ['/usr/bin','/bin','/usr/sbin'],
       command     => "patch /home/${user}/${name}/conf/server.xml < /usr/local/src/tomcat${tomcat_version}-apr.patch",
       refreshonly => true,
