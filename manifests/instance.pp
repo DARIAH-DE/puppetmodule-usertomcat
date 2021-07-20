@@ -63,6 +63,7 @@ define usertomcat::instance (
   $telegraf_enabled         = false,
   $logdir                   = "/home/${user}/${name}/logs",
   $keep_logs                = 30,
+  $initd_template_loc       = "usertomcat/etc/init.d/tomcat${tomcat_version}.Debian.erb",
 ) {
 
   require 'usertomcat::dependencies'
@@ -105,7 +106,7 @@ define usertomcat::instance (
 
   file { "/etc/init.d/${name}":
     ensure  => file,
-    content => template("usertomcat/etc/init.d/tomcat${tomcat_version}.Debian.erb"),
+    content => template($initd_template_loc),
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
