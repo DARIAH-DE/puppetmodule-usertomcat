@@ -18,7 +18,7 @@ TOMCAT8_GROUP=<%= @group %>
 # response time). If you use that option and you run Tomcat on a machine with
 # exactly one CPU chip that contains one or two cores, you should also add
 # the "-XX:+CMSIncrementalMode" option.
-JAVA_OPTS="-Djava.awt.headless=true -Xmx<%= @xmx %> -Xms<%= @xms %> -XX:+UseConcMarkSweepGC"
+JAVA_OPTS="-Djava.awt.headless=true -Xmx<%= @xmx %> -Xms<%= @xms %> -XX:+UseConcMarkSweepGC -Dlog4j2.formatMsgNoLookups=true"
 
 <% if @additional_java_opts != nil -%>
 JAVA_OPTS="${JAVA_OPTS} <%= @additional_java_opts %>"
