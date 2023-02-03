@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# /etc/init.d/tomcat9 -- startup script for the Tomcat 9 servlet engine
+# /etc/init.d/<%= @name %> -- startup script for the Tomcat 7 servlet engine
 #
 # Written by Miquel van Smoorenburg <miquels@cistron.nl>.
 # Modified for Debian GNU/Linux	by Ian Murdock <imurdock@gnu.ai.mit.edu>.
@@ -58,21 +58,21 @@ fi
 
 # The following variables can be overwritten in $DEFAULT
 
-# Run Tomcat 9 as this user ID and group ID
-TOMCAT9_USER=<%= @user %>
-TOMCAT9_GROUP=<%= @group %>
+# Run Tomcat 7 as this user ID and group ID
+TOMCAT7_USER=<%= @user %>
+TOMCAT7_GROUP=<%= @group %>
 
 # this is a work-around until there is a suitable runtime replacement
 # for dpkg-architecture for arch:all packages
 # this function sets the variable JDK_DIRS
 find_jdks()
 {
-    for java_version in 19 18 17 11 8
+    for java_version in 9 8 7
     do
-        for jvmdir in /usr/lib/jvm/java-${java_version}-openjdk-* \
+        for jvmdir in /usr/lib/jvm/java-${java_version}-oracle \
+                      /usr/lib/jvm/java-${java_version}-openjdk-* \
                       /usr/lib/jvm/jdk-${java_version}-oracle-* \
-                      /usr/lib/jvm/jre-${java_version}-oracle-* \
-                      /usr/lib/jvm/java-${java_version}-oracle
+                      /usr/lib/jvm/jre-${java_version}-oracle-*
         do
             if [ -d "${jvmdir}" ]
             then
@@ -81,11 +81,14 @@ find_jdks()
         done
     done
 
+    # Add older non multi arch installations
+    JDK_DIRS="${JDK_DIRS} /usr/lib/jvm/java-7-oracle"
 }
 
 # The first existing directory is used for JAVA_HOME (if JAVA_HOME is not
 # defined in $DEFAULT)
 #JDK_DIRS="/usr/lib/jvm/default-java"
+
 find_jdks
 
 # Look for the right JVM to use
@@ -96,18 +99,19 @@ for jdir in $JDK_DIRS; do
 done
 export JAVA_HOME
 
-# Directory where the Tomcat 8 binary distribution resides
-CATALINA_HOME=/usr/share/tomcat9
+# Directory where the Tomcat 6 binary distribution resides
+CATALINA_HOME=/usr/share/tomcat7
 
 # Directory for per-instance configuration files and webapps
-CATALINA_BASE=/home/$TOMCAT9_USER/$NAME
+CATALINA_BASE=/home/$TOMCAT7_USER/$NAME
 
 # Use the Java security manager? (yes/no)
-TOMCAT9_SECURITY=no
+TOMCAT7_SECURITY=no
 
 # Policy directory when using the security manager. Must be present, but can be
 # set to the global tomcat default
-POLICY_D=/etc/tomcat9/policy.d
+POLICY_D=/etc/tomcat7/policy.d
+#POLICY_D=$CATALINA_BASE/policy.d
 
 # Default Java options
 # Set java.awt.headless=true if JAVA_OPTS is not set so the
@@ -115,7 +119,7 @@ POLICY_D=/etc/tomcat9/policy.d
 # It also looks like the default heap size of 64M is not enough for most cases
 # so the maximum heap size is set to 128M
 if [ -z "$JAVA_OPTS" ]; then
-	JAVA_OPTS="-Djava.awt.headless=true -Xmx128M"
+	JAVA_OPTS="-Djava.awt.headless=true -Xmx1024M"
 fi
 
 # End of variables that can be overwritten in $DEFAULT
@@ -136,13 +140,13 @@ if [ -z "$CATALINA_TMPDIR" ]; then
 	CATALINA_TMPDIR="$JVM_TMP"
 fi
 
-# Set the JSP compiler if set in the tomcat9.default file
+# Set the JSP compiler if set in the tomcat7.default file
 if [ -n "$JSP_COMPILER" ]; then
 	JAVA_OPTS="$JAVA_OPTS -Dbuild.compiler=\"$JSP_COMPILER\""
 fi
 
 SECURITY=""
-if [ "$TOMCAT9_SECURITY" = "yes" ]; then
+if [ "$TOMCAT7_SECURITY" = "yes" ]; then
 	SECURITY="-security"
 fi
 
@@ -161,6 +165,7 @@ catalina_sh() {
 
 	AUTHBIND_COMMAND=""
 	if [ "$AUTHBIND" = "yes" -a "$1" = "start" ]; then
+		JAVA_OPTS="$JAVA_OPTS -Djava.net.preferIPv4Stack=true"
 		AUTHBIND_COMMAND="/usr/bin/authbind --deep /bin/bash -c "
 	fi
 
@@ -182,12 +187,10 @@ catalina_sh() {
 
 	# Run the catalina.sh script as a daemon
 	set +e
-	if [ ! -f "$CATALINA_BASE"/logs/catalina.out ]; then
-		install -o $TOMCAT9_USER -g adm -m 644 /dev/null "$CATALINA_BASE"/logs/catalina.out
-	fi
-	install -o $TOMCAT9_USER -g adm -m 644 /dev/null "$CATALINA_PID"
-	start-stop-daemon --start -b -u "$TOMCAT9_USER" -g "$TOMCAT9_GROUP" \
-		-c "$TOMCAT9_USER" -d "$CATALINA_TMPDIR" -p "$CATALINA_PID" \
+	touch "$CATALINA_PID" "$CATALINA_BASE"/logs/catalina.out
+	chown $TOMCAT7_USER "$CATALINA_PID" "$CATALINA_BASE"/logs/catalina.out
+	start-stop-daemon --start -b -u "$TOMCAT7_USER" -g "$TOMCAT7_GROUP" \
+		-c "$TOMCAT7_USER" -d "$CATALINA_TMPDIR" -p "$CATALINA_PID" \
 		-x /bin/bash -- -c "$AUTHBIND_COMMAND $TOMCAT_SH"
 	status="$?"
 	set +a -e
@@ -208,7 +211,7 @@ case "$1" in
 
 	log_daemon_msg "Starting $DESC" "$NAME"
 	if start-stop-daemon --test --start --pidfile "$CATALINA_PID" \
-		--user $TOMCAT9_USER --exec "$JAVA_HOME/bin/java" \
+		--user $TOMCAT7_USER --exec "$JAVA_HOME/bin/java" \
 		>/dev/null; then
 
 		# Regenerate POLICY_CACHE file
@@ -221,16 +224,16 @@ case "$1" in
 
 		# Remove / recreate JVM_TMP directory
 		rm -rf "$JVM_TMP"
-		mkdir "$JVM_TMP" || {
+		mkdir -p "$JVM_TMP" || {
 			log_failure_msg "could not create JVM temporary directory"
 			exit 1
 		}
-		chown -h $TOMCAT9_USER "$JVM_TMP"
+		chown $TOMCAT7_USER "$JVM_TMP"
 
 		catalina_sh start $SECURITY
 		sleep 5
         	if start-stop-daemon --test --start --pidfile "$CATALINA_PID" \
-			--user $TOMCAT9_USER --exec "$JAVA_HOME/bin/java" \
+			--user $TOMCAT7_USER --exec "$JAVA_HOME/bin/java" \
 			>/dev/null; then
 			if [ -f "$CATALINA_PID" ]; then
 				rm -f "$CATALINA_PID"
@@ -250,7 +253,7 @@ case "$1" in
 	set +e
 	if [ -f "$CATALINA_PID" ]; then 
 		start-stop-daemon --stop --pidfile "$CATALINA_PID" \
-			--user "$TOMCAT9_USER" \
+			--user "$TOMCAT7_USER" \
 			--retry=TERM/20/KILL/5 >/dev/null
 		if [ $? -eq 1 ]; then
 			log_progress_msg "$DESC is not running but pid file exists, cleaning up"
@@ -270,7 +273,7 @@ case "$1" in
    status)
 	set +e
 	start-stop-daemon --test --start --pidfile "$CATALINA_PID" \
-		--user $TOMCAT9_USER --exec "$JAVA_HOME/bin/java" \
+		--user $TOMCAT7_USER --exec "$JAVA_HOME/bin/java" \
 		>/dev/null 2>&1
 	if [ "$?" = "0" ]; then
 
@@ -295,7 +298,7 @@ case "$1" in
 	;;
   try-restart)
         if start-stop-daemon --test --start --pidfile "$CATALINA_PID" \
-		--user $TOMCAT9_USER --exec "$JAVA_HOME/bin/java" \
+		--user $TOMCAT7_USER --exec "$JAVA_HOME/bin/java" \
 		>/dev/null; then
 		$0 start
 	fi
